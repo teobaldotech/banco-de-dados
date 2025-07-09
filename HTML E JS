@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Banco de Dados em HTML (LocalStorage)</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px;}
+    input, button { margin: 5px; }
+    ul { padding: 0; }
+    li { list-style: none; margin-bottom: 5px;}
+  </style>
+</head>
+<body>
+  <h2> Banco de Dados em HTML + JS</h2>
+  <input type="text" id="nome" placeholder="Digite um nome..." />
+  <button onclick="adicionar()">Adicionar</button>
+  <ul id="lista"></ul>
+
+  <script>
+    function listar() {
+      const lista = document.getElementById('lista');
+      lista.innerHTML = '';
+      const dados = JSON.parse(localStorage.getItem('nomes') || '[]');
+      dados.forEach((nome, i) => {
+        const li = document.createElement('li');
+        li.textContent = nome + " ";
+        const btn = document.createElement('button');
+        btn.textContent = "Excluir";
+        btn.onclick = function() { remover(i); };
+        li.appendChild(btn);
+        lista.appendChild(li);
+      });
+    }
+
+    function adicionar() {
+      const nome = document.getElementById('nome').value.trim();
+      if (!nome) return;
+      const dados = JSON.parse(localStorage.getItem('nomes') || '[]');
+      dados.push(nome);
+      localStorage.setItem('nomes', JSON.stringify(dados));
+      document.getElementById('nome').value = '';
+      listar();
+    }
+
+    function remover(index) {
+      const dados = JSON.parse(localStorage.getItem('nomes') || '[]');
+      dados.splice(index, 1);
+      localStorage.setItem('nomes', JSON.stringify(dados));
+      listar();
+    }
+
+    // Carregar lista ao abrir a página
+    listar();
+  </script>
+</body>
+</html>
